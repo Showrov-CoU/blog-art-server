@@ -38,20 +38,29 @@ const courseList = database.collection("course");
 const whatWeDoList = database.collection("whatWeDo");
 
 app.get("/blog", async (req, res) => {
-  const data = await blogList.find();
+  const page = parseInt(req.query.page);
+  const size = parseInt(req.query.size);
+  //   console.log(para);
+  const data = await blogList
+    .find()
+    .skip((page - 1) * size)
+    .limit(size);
   const blog = await data.toArray();
   res.send(blog);
 });
+
 app.get("/abroad", async (req, res) => {
   const data = await abroadList.find();
   const abroad = await data.toArray();
   res.send(abroad);
 });
+
 app.get("/course", async (req, res) => {
   const data = await courseList.find();
   const course = await data.toArray();
   res.send(course);
 });
+
 app.get("/whatwedo", async (req, res) => {
   const data = await whatWeDoList.find();
   const whatwedo = await data.toArray();
