@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
 const port = process.env.PORT || 3000;
 
@@ -46,6 +46,13 @@ app.get("/blog", async (req, res) => {
     .skip((page - 1) * size)
     .limit(size);
   const blog = await data.toArray();
+  res.send(blog);
+});
+
+app.get("/blog/:id", async (req, res) => {
+  const id = req.params.id;
+  const query = { _id: new ObjectId(id) };
+  const blog = await blogList.findOne(query);
   res.send(blog);
 });
 
